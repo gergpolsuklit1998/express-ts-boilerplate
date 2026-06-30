@@ -1,0 +1,17 @@
+import type { IUserRepository } from '@/modules/user/domain/repositories/IUserRepository.js';
+import { NotFoundError } from '@/shared/errors/AppError.js';
+import type { UserOutput } from '@/modules/user/application/dto/UserDTO.js';
+
+interface Deps {
+  userRepository: IUserRepository;
+}
+
+export class GetUserById {
+  constructor(private readonly deps: Deps) {}
+
+  async execute(id: string): Promise<UserOutput> {
+    const user = await this.deps.userRepository.findById(id);
+    if (!user) throw new NotFoundError(`User ${id} not found`);
+    return user.toPublicObject();
+  }
+}

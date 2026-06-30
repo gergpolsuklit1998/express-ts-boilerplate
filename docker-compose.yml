@@ -1,11 +1,26 @@
 services:
-  api:
-    build: .
+  # api:
+  #   build: .
+  #   ports:
+  #     - "3000:3000"
+  #   env_file:
+  #     - .env
+  #   volumes:
+  #     - .:/app
+  #     - /app/node_modules
+  #   command: pnpm dev
+  #   depends_on:
+  #     - mongodb
+
+  mongodb:
+    image: mongo:7
     ports:
-      - "3000:3000"
-    env_file:
-      - .env
+      - "27017:27017"
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: password
     volumes:
-      - .:/app
-      - /app/node_modules
-    command: pnpm dev
+      - mongodb_data:/data/db
+
+volumes:
+  mongodb_data:
