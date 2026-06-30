@@ -1,29 +1,51 @@
 import mongoose from 'mongoose';
 import { createApp } from '@/app.js';
 import { config } from '@/shared/config/env.js';
+import { logger } from '@/shared/utils/logger.js';
 
 async function start(): Promise<void> {
-  console.log('Connecting to MongoDB...');
-  await mongoose.connect(config.MONGO_URI);
-  console.log('MongoDB connected successfully');
-  const app = createApp();
-  const server = app.listen(config.PORT, () => {
-    console.log(
-      `${config.APP_NAME} running on http://localhost:${config.PORT}`,
-    );
-  });
+  try {
+    logger.info('Connecting to MongoDB...');
 
-  const shutdown = (signal: string) => {
-    console.warn(`${signal} received. shutting down...`);
+    await mongoose.connect(config.MONGO_URI);
 
-    server.close(() => {
-      console.log('server closed');
-      process.exit(0);
+    logger.info('MongoDB connected successfully');
+
+    const app = createApp();
+
+    const server = app.listen(config.PORT, () => {
+      logger.info(
+        `${config.APP_NAME} is running on http://localhost:${config.PORT}`,
+      );
     });
-  };
 
-  process.on('SIGTERM', () => shutdown('SIGTERM'));
-  process.on('SIGINT', () => shutdown('SIGINT'));
+    const shutdown = async (signal: string) => {
+      logger.warn(`${signal} received. Shutting down...`);
+
+      server.close(async () => {
+        logger.info('HTTP server closed');
+
+        await mongoose.connection.close();
+        logger.info('MongoDB connection closed');
+
+        process.exit(0);
+      });
+    };
+
+    process.on('SIGTERM', () => {
+      void shutdown('SIGTERM');
+    });
+
+    process.on('SIGINT', () => {
+      void shutdown('SIGINT');
+    });
+  } catch (error) {
+    logger.error('Failed to start application', {
+      error: error instanceof Error ? error.stack : error,
+    });
+
+    process.exit(1);
+  }
 }
 
-start();
+void start();
