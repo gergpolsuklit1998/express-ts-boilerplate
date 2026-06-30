@@ -4,7 +4,7 @@ import { UserModel } from '@/modules/user/infrastructure/models/UserModel.js';
 
 export class UserRepositoryMongo implements IUserRepository {
   async findById(id: string): Promise<User | null> {
-    const doc = await UserModel.findById(id).lean();
+    const doc = await UserModel.findOne({ id }).lean();
     return doc ? this.toEntity(doc) : null;
   }
 
@@ -15,7 +15,7 @@ export class UserRepositoryMongo implements IUserRepository {
 
   async save(user: User): Promise<void> {
     await UserModel.create({
-      _id: user.id,
+      id: user.id,
       name: user.name,
       email: user.email,
       passwordHash: user.passwordHash,
@@ -24,18 +24,18 @@ export class UserRepositoryMongo implements IUserRepository {
   }
 
   async delete(id: string): Promise<void> {
-    await UserModel.findByIdAndDelete(id);
+    await UserModel.deleteOne({ id });
   }
 
   private toEntity(doc: {
-    _id: { toString: () => string };
+    id: { toString: () => string };
     name: string;
     email: string;
     passwordHash: string;
     createdAt: Date;
   }): User {
     return new User({
-      id: doc._id.toString(),
+      id: doc.id.toString(),
       name: doc.name,
       email: doc.email,
       passwordHash: doc.passwordHash,

@@ -6,7 +6,7 @@ import type {
   CreateUserInput,
   UserOutput,
 } from '@/modules/user/application/dto/UserDTO.js';
-
+import { UserMapper } from '@/modules/user/application/mappers/UserMapper.js';
 interface IdGenerator {
   generate(): string;
 }
@@ -40,6 +40,6 @@ export class CreateUser {
 
     await userRepository.save(user);
 
-    return user.toPublicObject();
+    return UserMapper.toOutput(user);
   }
 }

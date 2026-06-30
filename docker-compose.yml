@@ -2,7 +2,7 @@ services:
   # api:
   #   build: .
   #   ports:
-  #     - "3000:3000"
+  #     - '3000:3000'
   #   env_file:
   #     - .env
   #   volumes:
@@ -11,16 +11,36 @@ services:
   #   command: pnpm dev
   #   depends_on:
   #     - mongodb
+  #   networks:
+  #     - mongodb_network
 
   mongodb:
-    image: mongo:7
-    ports:
-      - "27017:27017"
+    image: mongo:latest
+    container_name: ts-boilerplate-mongodb
+    restart: unless-stopped
     environment:
-      MONGO_INITDB_ROOT_USERNAME: root
-      MONGO_INITDB_ROOT_PASSWORD: password
+      MONGO_INITDB_ROOT_USERNAME: '${MONGO_INITDB_ROOT_USERNAME:-root}'
+      MONGO_INITDB_ROOT_PASSWORD: '${MONGO_INITDB_ROOT_PASSWORD:-password}'
     volumes:
-      - mongodb_data:/data/db
+      - mongodb-data:/data/db
+      - mongodb-log:/var/log/mongodb
+    ports:
+      - '27017:27017'
+    healthcheck:
+      test: ['CMD-SHELL', "mongosh --eval 'db.runCommand({ ping: 1 })' --quiet"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+    networks:
+      - mongodb_network
 
 volumes:
-  mongodb_data:
+  mongodb-data:
+    driver: local
+  mongodb-log:
+    driver: local
+
+networks:
+  mongodb_network:
+    driver: bridge

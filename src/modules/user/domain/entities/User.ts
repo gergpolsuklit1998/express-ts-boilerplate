@@ -1,5 +1,3 @@
-import type { UserOutput } from '@/modules/user/application/dto/UserDTO.js';
-
 export interface UserProps {
   id: string;
   name: string;
@@ -31,10 +29,5 @@ export class User {
       throw new Error('Name too short');
     }
     this.name = newName;
-  }
-
-  toPublicObject(): UserOutput {
-    const { passwordHash: _passwordHash, ...rest } = this;
-    return rest as UserOutput;
   }
 }
