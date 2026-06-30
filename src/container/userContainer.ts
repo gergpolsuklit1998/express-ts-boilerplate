@@ -4,6 +4,7 @@ import { RefreshTokenRepositoryMongo } from '@/modules/auth/infrastructure/repos
 import { CreateUser } from '@/modules/user/application/useCases/CreateUser.js';
 import { GetUserById } from '@/modules/user/application/useCases/GetUserById.js';
 import { DeleteUser } from '@/modules/user/application/useCases/DeleteUser.js';
+import { UpdateUser } from '@/modules/user/application/useCases/UpdateUser.js';
 import { UserController } from '@/modules/user/presentation/controllers/UserController.js';
 
 export function buildUserContainer() {
@@ -14,11 +15,13 @@ export function buildUserContainer() {
   const createUser = new CreateUser({ userRepository, idGenerator });
   const getUserById = new GetUserById({ userRepository });
   const deleteUser = new DeleteUser({ userRepository, refreshTokenRepository });
+  const updateUser = new UpdateUser({ userRepository });
 
   const userController = new UserController({
     createUser,
     getUserById,
     deleteUser,
+    updateUser,
   });
 
   return { userController };

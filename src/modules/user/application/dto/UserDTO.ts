@@ -5,6 +5,10 @@ export interface CreateUserInput {
   password: string;
 }
 
+export interface UpdateUserInput {
+  name: string;
+}
+
 export interface UserOutput {
   id: string;
   name: string;

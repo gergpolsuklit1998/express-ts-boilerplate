@@ -4,6 +4,7 @@ import { asyncHandler } from '@/shared/middlewares/asyncHandler.js';
 import { validate } from '@/shared/middlewares/validate.js';
 import {
   createUserSchema,
+  updateUserSchema,
   idParamSchema,
 } from '@/modules/user/presentation/validators/userValidator.js';
 import { authenticate } from '@/shared/middlewares/authenticate.js';
@@ -39,6 +40,13 @@ export function userRoutes(userController: UserController): Router {
     authorize(USER_ROLE.ADMIN), // เฉพาะ admin เท่านั้นที่ลบ user ได้
     validate(idParamSchema, 'params'),
     asyncHandler(userController.delete),
+  );
+
+  router.patch(
+    '/:id',
+    validate(idParamSchema, 'params'),
+    validate(updateUserSchema, 'body'),
+    asyncHandler(userController.update),
   );
 
   return router;

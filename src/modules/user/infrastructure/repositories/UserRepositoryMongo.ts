@@ -28,6 +28,17 @@ export class UserRepositoryMongo implements IUserRepository {
     await UserModel.deleteOne({ id });
   }
 
+  async update(user: User): Promise<void> {
+    await UserModel.updateOne(
+      { id: user.id },
+      {
+        $set: {
+          name: user.name,
+        },
+      },
+    );
+  }
+
   private toEntity(doc: {
     id: { toString: () => string };
     name: string;

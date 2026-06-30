@@ -17,7 +17,7 @@ export class AuthController {
   constructor(private readonly deps: Deps) {}
 
   login = async (
-    req: Request<Record<string, never>, Record<string, never>, LoginSchemaType>,
+    req: Request<LoginSchemaType>,
     res: Response,
   ): Promise<void> => {
     const result = await this.deps.login.execute(req.body);
@@ -25,11 +25,7 @@ export class AuthController {
   };
 
   refresh = async (
-    req: Request<
-      Record<string, never>,
-      Record<string, never>,
-      RefreshTokenSchemaType
-    >,
+    req: Request<RefreshTokenSchemaType>,
     res: Response,
   ): Promise<void> => {
     const result = await this.deps.refreshAccessToken.execute(req.body);
