@@ -1,3 +1,4 @@
+import { UserRole } from '@/shared/constants/userRole.js';
 export interface CreateUserInput {
   name: string;
   email: string;
@@ -8,5 +9,6 @@ export interface UserOutput {
   id: string;
   name: string;
   email: string;
+  role: UserRole;
   createdAt: Date;
 }

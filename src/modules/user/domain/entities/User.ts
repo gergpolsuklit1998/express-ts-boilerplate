@@ -1,8 +1,10 @@
+import { USER_ROLE, UserRole } from '@/shared/constants/userRole.js';
 export interface UserProps {
   id: string;
   name: string;
   email: string;
   passwordHash: string;
+  role?: UserRole;
   createdAt?: Date;
 }
 
@@ -11,6 +13,7 @@ export class User {
   name: string;
   readonly email: string;
   readonly passwordHash: string;
+  readonly role: UserRole;
   readonly createdAt: Date;
 
   constructor(props: UserProps) {
@@ -21,6 +24,7 @@ export class User {
     this.name = props.name;
     this.email = props.email;
     this.passwordHash = props.passwordHash;
+    this.role = props.role ?? USER_ROLE.MEMBER;
     this.createdAt = props.createdAt ?? new Date();
   }
 

@@ -1,8 +1,8 @@
 import bcrypt from 'bcrypt';
 import { User } from '@/modules/user/domain/entities/User.js';
-import type { IUserRepository } from '@/modules/user/domain/repositories/IUserRepository.js';
+import { IUserRepository } from '@/modules/user/domain/repositories/IUserRepository.js';
 import { ConflictError } from '@/shared/errors/AppError.js';
-import type {
+import {
   CreateUserInput,
   UserOutput,
 } from '@/modules/user/application/dto/UserDTO.js';

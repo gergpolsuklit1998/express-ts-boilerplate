@@ -1,5 +1,5 @@
 import { User } from '@/modules/user/domain/entities/User.js';
-import type { UserOutput } from '@/modules/user/application/dto/UserDTO.js';
+import { UserOutput } from '@/modules/user/application/dto/UserDTO.js';
 
 export class UserMapper {
   static toOutput(user: User): UserOutput {
@@ -7,6 +7,7 @@ export class UserMapper {
       id: user.id,
       name: user.name,
       email: user.email,
+      role: user.role,
       createdAt: user.createdAt,
     };
   }

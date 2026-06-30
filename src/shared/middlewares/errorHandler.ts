@@ -1,4 +1,4 @@
-import type { Request, Response, NextFunction } from 'express';
+import { Request, Response, NextFunction } from 'express';
 import { AppError } from '@/shared/errors/AppError.js';
 import { logger } from '@/shared/utils/logger.js';
 

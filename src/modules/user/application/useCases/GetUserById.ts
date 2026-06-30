@@ -1,6 +1,6 @@
-import type { IUserRepository } from '@/modules/user/domain/repositories/IUserRepository.js';
+import { IUserRepository } from '@/modules/user/domain/repositories/IUserRepository.js';
 import { NotFoundError } from '@/shared/errors/AppError.js';
-import type { UserOutput } from '@/modules/user/application/dto/UserDTO.js';
+import { UserOutput } from '@/modules/user/application/dto/UserDTO.js';
 import { UserMapper } from '@/modules/user/application/mappers/UserMapper.js';
 
 interface Deps {

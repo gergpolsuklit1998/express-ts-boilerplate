@@ -1,18 +1,22 @@
 services:
-  # api:
-  #   build: .
-  #   ports:
-  #     - '3000:3000'
-  #   env_file:
-  #     - .env
-  #   volumes:
-  #     - .:/app
-  #     - /app/node_modules
-  #   command: pnpm dev
-  #   depends_on:
-  #     - mongodb
-  #   networks:
-  #     - mongodb_network
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: ts-boilerplate-api
+    restart: unless-stopped
+    ports:
+      - '3000:3000'
+    env_file:
+      - .env
+    environment:
+      # override MONGO_URI ให้ชี้ไปที่ service name "mongodb" แทน localhost
+      MONGO_URI: 'mongodb://${MONGO_INITDB_ROOT_USERNAME:-root}:${MONGO_INITDB_ROOT_PASSWORD:-password}@mongodb:27017/?authSource=admin'
+    depends_on:
+      mongodb:
+        condition: service_healthy   # รอ mongo healthcheck ผ่านก่อนค่อย start api
+    networks:
+      - mongodb_network
 
   mongodb:
     image: mongo:latest
